@@ -1,0 +1,30 @@
+{
+  "name": "frontend-crew",
+  "owner": {
+    "name": "Kishen-ravi"
+  },
+  "metadata": {
+    "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work."
+  },
+  "plugins": [
+    {
+      "name": "frontend-crew",
+      "source": "./",
+      "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, tests, and corner cases pass.",
+      "author": {
+        "name": "Kishen-ravi"
+      },
+      "homepage": "https://github.com/Kishen-ravi/frontend-crew",
+      "repository": "https://github.com/Kishen-ravi/frontend-crew",
+      "license": "MIT",
+      "category": "development",
+      "keywords": [
+        "react",
+        "nextjs",
+        "typescript",
+        "zod",
+        "frontend"
+      ]
+    }
+  ]
+}

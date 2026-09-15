@@ -47,7 +47,8 @@ Plan before code only when the change is large or consequential (new route tree,
 Use the host agent's sub-agent / Task tool. Each specialist gets a **new** context.
 
 - **Cursor:** Task tool. Implementer → `frontend-developer`, or `nextjs-app-router-developer` when the work is App Router, RSC, server actions, or routing. Types, tests, grader → `generalPurpose`. Do not `resume` a builder as the grader.
-- **Claude Code / Codex / others:** Same roles through that host's Task / sub-agent API.
+- **Claude Code:** Task tool. Fresh sub-agent per specialist. Do not resume the implementer as the grader.
+- **Codex / others:** Same roles through that host's Task / sub-agent API.
 
 Launch independent specialists in parallel. Serialize agents that would edit the same files.
 

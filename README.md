@@ -10,7 +10,7 @@ Typecheck and tests are part of the done bar, not a nicety.
 
 ## Install
 
-### Skills CLI (Cursor, Codex, and other agents)
+### Skills CLI (Cursor, Claude Code, Codex, and other agents)
 
 ```bash
 npx skills add Kishen-ravi/frontend-crew
@@ -51,6 +51,31 @@ Reload the window (`Developer: Reload Window`), then open **Customize** and conf
 **Team marketplace:** import [Kishen-ravi/frontend-crew](https://github.com/Kishen-ravi/frontend-crew) under Dashboard → Plugins → Add Marketplace.
 
 **Official Marketplace:** submit this repo at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) if you want it listed publicly.
+
+### Claude Code
+
+Add this repo as a plugin marketplace, then install the plugin:
+
+```text
+/plugin marketplace add Kishen-ravi/frontend-crew
+/plugin install frontend-crew@frontend-crew
+/reload-plugins
+```
+
+Or from the shell:
+
+```bash
+claude plugin marketplace add Kishen-ravi/frontend-crew
+claude plugin install frontend-crew@frontend-crew --scope user
+```
+
+Invoke with `/frontend-crew:frontend-crew`, or ask Claude to use `frontend-crew`.
+
+The Skills CLI also copies the skill into Claude Code:
+
+```bash
+npx skills add Kishen-ravi/frontend-crew -g -y
+```
 
 ### Codex
 
@@ -107,8 +132,10 @@ Trivial copy or typo fixes stay solo. Features, schema changes, and behavior bug
 
 ```
 frontend-crew/
-├── plugin.json                         # Agent Plugins manifest (Cursor, Codex, others)
+├── plugin.json                         # Agent Plugins manifest (Cursor, Claude, Codex, others)
 ├── .cursor-plugin/plugin.json          # Cursor Plugin manifest
+├── .claude-plugin/plugin.json          # Claude Code plugin manifest
+├── .claude-plugin/marketplace.json     # Claude Code marketplace
 ├── .codex-plugin/plugin.json           # Codex compatibility manifest
 ├── .agents/plugins/marketplace.json    # Codex marketplace
 ├── skills/frontend-crew/
