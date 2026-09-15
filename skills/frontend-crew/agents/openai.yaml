@@ -1,0 +1,7 @@
+interface:
+  display_name: Frontend Crew
+  short_description: Orchestrate implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod.
+  default_prompt: Use frontend-crew for this frontend change. Give the crew the goal, apply the house rules, and hold the work to the done bar.
+
+policy:
+  allow_implicit_invocation: true

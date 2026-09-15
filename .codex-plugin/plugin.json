@@ -1,0 +1,21 @@
+{
+  "name": "frontend-crew",
+  "version": "1.0.0",
+  "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, tests, and corner cases pass.",
+  "author": {
+    "name": "Kishen-ravi",
+    "url": "https://github.com/Kishen-ravi"
+  },
+  "homepage": "https://github.com/Kishen-ravi/frontend-crew",
+  "repository": "https://github.com/Kishen-ravi/frontend-crew",
+  "license": "MIT",
+  "keywords": ["react", "nextjs", "typescript", "zod", "frontend"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Frontend Crew",
+    "shortDescription": "Orchestrate implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod.",
+    "defaultPrompt": [
+      "Use frontend-crew for this frontend change. Give the crew the goal, apply the house rules, and hold the work to the done bar."
+    ]
+  }
+}

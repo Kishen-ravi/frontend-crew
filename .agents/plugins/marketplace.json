@@ -1,0 +1,20 @@
+{
+  "name": "frontend-crew",
+  "interface": {
+    "displayName": "Frontend Crew"
+  },
+  "plugins": [
+    {
+      "name": "frontend-crew",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
