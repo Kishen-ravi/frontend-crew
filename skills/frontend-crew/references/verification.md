@@ -16,26 +16,55 @@ Optional path:
 node <frontend-crew-skill>/scripts/detect-verify.mjs /absolute/path/to/app
 ```
 
-The script prints JSON: package manager, stack flags, and the commands to run. Use those commands as-is.
+The script prints JSON. Use its commands as-is.
 
-If you cannot run it, open the nearest `package.json` and pick scripts in this order:
+| Field | Contents |
+|---|---|
+| `packageManager` | From the `packageManager` field, else the nearest lockfile up to the repo root (workspaces keep it at the root) |
+| `typecheck` / `test` / `lint` / `build` / `nextTypegen` | Commands to run |
+| `versions` | `declared` range and `installed` version for react, react-dom, next, typescript, zod, eslint |
+| `instructionFiles` | `AGENTS.md`, `CLAUDE.md`, Cursor rules, Copilot instructions, from the app directory up to the repo root (app-level first). Read every one; they outrank the skill. |
+| `nextBundledDocs` | Version-matched Next.js docs (16.2+) |
+| `stack` | Which libraries and test tools are present |
 
-**Typecheck:** `typecheck` → `ts:check` → `tsc` → `npx tsc --noEmit` when `typescript` is a dependency.
+If `installed` is `null`, dependencies are not installed. Install them (see below) before trusting any version-specific rule.
 
-**Tests:** `test` → `test:unit` → `vitest` / `jest` / `playwright` scripts that already exist.
+If you cannot run the script, open the nearest `package.json` and pick scripts in this order:
 
-**Lint:** run `lint` when the types or tests specialist would otherwise miss an error the repo treats as blocking. Lint is not a substitute for typecheck.
+- **Typecheck:** `typecheck` → `ts:check` → `tsc` → `npx tsc --noEmit` when `typescript` is a dependency.
+- **Tests:** `test` → `test:unit` → `vitest` / `jest` / `playwright` scripts that already exist.
+- **Lint:** `lint` → `eslint`.
+- **Build:** `build`.
+
+## Baseline (before any change)
+
+Run typecheck, lint, and the relevant tests on the untouched tree, plus the build when `gate-build` will apply. Save command, exit code, and failures. The baseline is the only way to separate pre-existing failures from regressions ([standards-checklist.md](standards-checklist.md)). If the tree already had uncommitted user changes, record that; never stash or discard them.
+
+If you need a baseline after the change has started, check out the base ref in a separate `git worktree` instead of touching the working tree.
+
+## Gate commands
+
+| Check | When | Notes |
+|---|---|---|
+| `nextTypegen` | Next.js with typed routes / `PageProps` | Run before typecheck. |
+| Typecheck | Any `.ts` / `.tsx` change | Must use the app's own `tsconfig`. Do not pass a fresh config. |
+| Lint | Repo has lint | Next.js 16 removed `next lint`. If the script still calls it, the failure is pre-existing; record it and do not migrate it as a drive-by. TypeScript 7 has no programmatic API until 7.1, so type-aware lint may not run; the items it proves are UNVERIFIED. |
+| Tests | Always for behavior changes | Prefer the targeted form the repo already uses (`vitest run path`, `pnpm test -- path`), then the full suite before PASS when it is affordable. |
+| Build | `gate-build` applies | Catches server/client boundary, serialization, and `'use cache'` errors that typecheck misses. |
+| `node <skill>/scripts/scan-diff.mjs [repo] [--base <ref>]` | Always | Added-line scan. Exit 1 means violations; `review` findings need a decision. Use `--base` with the branch point when the work is already committed. Files listed under `skipped` (binary, or over 2 MB) were not scanned; confirm they belong in the change. |
+
+## Runtime proof (optional)
+
+When acceptance depends on behavior in a running app and the prerequisites exist, use `next-dev-loop` (see [nextjs-guidelines.md](nextjs-guidelines.md)) or the repo's Playwright setup. Without them, mark runtime-only criteria UNVERIFIED. Do not substitute guesses.
 
 ## Rules
 
 - Do not invent a runner. If the repo uses Vitest, do not add Jest.
-- Prefer the targeted form the repo already uses (`vitest run path`, `pnpm test -- path`) when only some files changed.
-- `tsc --noEmit` must see the same `tsconfig` the app uses. Do not pass a fresh config.
-- Next.js apps: if `next typegen` / `next --turbopack typegen` is in scripts or required for route types, run it before `tsc`.
-- Capture the full command and exit code for the grader and the final report.
-- A skipped test suite is a failed done bar, not a pass.
-- If typecheck or tests cannot run (missing install, broken toolchain), stop and report the blocker. Do not skip to "looks fine."
+- Capture the full command, exit code, and pass/skip counts for the grader and the final report.
+- A skipped or focused test is not a pass.
+- Never claim a check passed unless it ran in this session and you saw the exit code.
+- If a command cannot run (missing install, env, network, or a broken toolchain), mark it UNVERIFIED with the reason. The verdict is then BLOCKED, not PASS.
 
 ## Install
 
-If `node_modules` is missing, install with the detected package manager (`pnpm install`, `npm install`, `yarn install`, `bun install`). Do not mix managers.
+If `node_modules` is missing, install with the detected package manager and the frozen lockfile: `npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable` (Berry) or `--frozen-lockfile` (v1), `bun install --frozen-lockfile`. Do not mix managers. Only a goal that changes dependencies may update the lockfile.

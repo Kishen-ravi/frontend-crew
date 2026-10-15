@@ -1,7 +1,7 @@
 {
   "name": "frontend-crew",
-  "version": "1.0.0",
-  "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, tests, and corner cases pass.",
+  "version": "1.1.0",
+  "description": "Orchestrates implementer, types, tests, reviewer, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, lint, tests, build, and a version-aware standards checklist pass.",
   "author": {
     "name": "Kishen-ravi"
   },
