@@ -4,13 +4,13 @@
     "name": "Kishen-ravi"
   },
   "metadata": {
-    "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work."
+    "description": "Orchestrates implementer, types, tests, reviewer, and grader agents for React, TypeScript, Next.js, and Zod work."
   },
   "plugins": [
     {
       "name": "frontend-crew",
       "source": "./",
-      "description": "Orchestrates implementer, types, tests, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, tests, and corner cases pass.",
+      "description": "Orchestrates implementer, types, tests, reviewer, and grader agents for React, TypeScript, Next.js, and Zod work until typecheck, lint, tests, build, and a version-aware standards checklist pass.",
       "author": {
         "name": "Kishen-ravi"
       },

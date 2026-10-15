@@ -119,14 +119,15 @@ The skill also triggers on ordinary frontend work (UI, App Router, forms, API ro
 
 ## What happens
 
-1. Detect the repo (`skills/frontend-crew/scripts/detect-verify.mjs`) — package manager, stack, typecheck/test commands.
-2. Write a brief: goal, applicable house rules, corner-case ids, done bar.
-3. Spawn an **implementer** (fresh context). Goal, not a recipe.
-4. Spawn **types** and **tests** (fresh context). They run the project's real commands.
-5. Spawn a **grader** (fresh context, never the builder). It tries to prove the work is not done.
-6. Loop on FAIL with a new implementer until PASS, or until a human decision is required.
+1. Detect the repo (`skills/frontend-crew/scripts/detect-verify.mjs`) — package manager, installed versions of React / Next.js / TypeScript / Zod, repo instruction files (`AGENTS.md`, `CLAUDE.md`), Next.js bundled docs, and typecheck / lint / test / build commands.
+2. Run a baseline of those commands so pre-existing failures are not blamed on the change.
+3. Write a brief: goal, acceptance criteria, the stack guidelines that apply, and a checklist of MUST rule ids and corner cases.
+4. Spawn an **implementer** (fresh context). Goal, not a recipe. Version-matched docs over memory.
+5. Spawn **types** and **tests** (fresh contexts), then a **standards/security reviewer** once they have finished editing. They run the project's real commands plus `scan-diff.mjs` and mark each checklist row PASS / FAIL / N/A / UNVERIFIED with evidence.
+6. Spawn a **grader** (fresh context, never the builder). It re-runs the gates and returns PASS, FAIL, or BLOCKED (something could not be verified).
+7. Loop on FAIL with a new implementer until PASS, or stop at BLOCKED / a human decision.
 
-Trivial copy or typo fixes stay solo. Features, schema changes, and behavior bugs get the crew.
+Trivial copy or typo fixes stay solo. Features, schema changes, and behavior bugs get the crew. Reviewing an existing branch uses reviewer + grader only.
 
 ## Layout
 
@@ -141,9 +142,15 @@ frontend-crew/
 ├── skills/frontend-crew/
 │   ├── SKILL.md                        # Orchestrator
 │   ├── agents/openai.yaml              # Codex / ChatGPT skill UI
-│   ├── scripts/detect-verify.mjs       # Detect stack + verify commands
+│   ├── scripts/detect-verify.mjs       # Detect stack, versions, instructions, verify commands
+│   ├── scripts/scan-diff.mjs           # Flag suppressions / weakened types / leaks on added lines
 │   └── references/
-│       ├── house-rules.md
+│       ├── house-rules.md              # MUST/SHOULD model, scope, security, a11y, tests
+│       ├── typescript-guidelines.md    # Stack rules, version notes, automated checks
+│       ├── react-guidelines.md
+│       ├── nextjs-guidelines.md
+│       ├── zod-guidelines.md
+│       ├── standards-checklist.md      # Statuses, gate items, pre-existing failures, verdict
 │       ├── corner-cases.md
 │       ├── verification.md
 │       ├── agent-prompts.md
@@ -154,12 +161,12 @@ frontend-crew/
 
 ## Customize
 
-Tighten [skills/frontend-crew/references/house-rules.md](skills/frontend-crew/references/house-rules.md) for your team (design system, testing library, auth helper). Keep the roster and the "builder never grades" rule — that is the point of the skill.
+Tighten [house-rules.md](skills/frontend-crew/references/house-rules.md) and the stack guideline files for your team (design system, testing library, auth helper). Keep the MUST/SHOULD split, the roster, and the "builder never grades" rule — that is the point of the skill. When a framework releases a new major, update the *Version notes* table in the matching guideline file.
 
-Detect-script checks (no extra install):
+Script checks (no extra install):
 
 ```bash
-node --test skills/frontend-crew/scripts/detect-verify.test.mjs
+node --test skills/frontend-crew/scripts/detect-verify.test.mjs skills/frontend-crew/scripts/scan-diff.test.mjs
 ```
 
 ## License
