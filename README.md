@@ -16,10 +16,10 @@ Typecheck and tests are part of the done bar, not a nicety.
 npx skills add Kishen-ravi/frontend-crew
 ```
 
-Global (every project on this machine):
+Global (every project on this machine). Name the agents you use; without `-a`, the CLI tries every agent it detects, and some (for example PromptScript) have no global skills directory and fail the install:
 
 ```bash
-npx skills add Kishen-ravi/frontend-crew -g -y
+npx skills add Kishen-ravi/frontend-crew -g -y -a claude-code -a cursor -a codex
 ```
 
 Confirm:
@@ -35,7 +35,7 @@ This repo is both an [Agent Plugin](https://agent-plugins.org) (`plugin.json`) a
 **From the Skills CLI** (fastest for a personal machine):
 
 ```bash
-npx skills add Kishen-ravi/frontend-crew -g -y
+npx skills add Kishen-ravi/frontend-crew -g -y -a cursor
 ```
 
 Then start a new Agent chat. The skill is `frontend-crew`. You can also invoke it with `/frontend-crew`.
@@ -74,7 +74,7 @@ Invoke with `/frontend-crew:frontend-crew`, or ask Claude to use `frontend-crew`
 The Skills CLI also copies the skill into Claude Code:
 
 ```bash
-npx skills add Kishen-ravi/frontend-crew -g -y
+npx skills add Kishen-ravi/frontend-crew -g -y -a claude-code
 ```
 
 ### Codex
@@ -97,7 +97,7 @@ $skill-installer Kishen-ravi/frontend-crew
 Or install only the skill via the Skills CLI:
 
 ```bash
-npx skills add Kishen-ravi/frontend-crew -g -y
+npx skills add Kishen-ravi/frontend-crew -g -y -a codex
 ```
 
 ### From a clone
